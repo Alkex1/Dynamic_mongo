@@ -27,9 +27,31 @@ async function show (req, res) {
   res.render('author/show', { author }) // render the 'author/show' and pass it the {author}
 }
 
+async function update (req, res) {
+  let {name, bio, gender} = req.body
+  let {id} = req.params
+  await AuthorModel.findByIdAndUpdate(id, {name, bio, gender})
+  res.redirect(`/authors/${id}`)
+}
+
+async function edit (req, res) {
+  let {id} = req.params
+  let author = await AuthorModel.findById(id)
+  res.render('author/edit', {author})
+}
+
+async function destroy (req, res) {
+  let {id} = req.params
+  await AuthorModel.findByIdAndDelete(id)
+  res.redirect('/authors')
+}
+
 module.exports = {
   create,
   index,
   make,
-  show
+  show,
+  destroy,
+  update,
+  edit
 }
